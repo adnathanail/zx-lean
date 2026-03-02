@@ -2,7 +2,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "tsc && rollup -c --environment NODE_ENV:production && rm -f ../.lake/build/ir/ZxLean/Visualize.* ../.lake/build/lib/lean/ZxLean/Visualize.*",
+    "build": "tsc && rollup -c --environment NODE_ENV:production",
     "build-dev": "tsc && rollup -c --environment NODE_ENV:development",
     "watch": "rollup -c --environment NODE_ENV:production --watch",
     "clean": "rm -rf dist build"

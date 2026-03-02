@@ -1,5 +1,7 @@
 /.lake
 widget/node_modules/
+widget/package-lock.json.hash
+widget/package-lock.json.trace
 widget/dist/
 widget/build/
 pyzx_daemon/__pycache__/
