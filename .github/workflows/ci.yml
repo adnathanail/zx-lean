@@ -1,15 +1,18 @@
-name: pyzx_daemon CI
+name: Lean Action CI
 
 on:
   push:
-    paths:
-      - "pyzx_daemon/**"
   pull_request:
-    paths:
-      - "pyzx_daemon/**"
 
 jobs:
-  lint:
+  zx_lean:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+      - uses: leanprover/lean-action@v1
+
+  pyzx_daemon:
     runs-on: ubuntu-latest
     defaults:
       run:
