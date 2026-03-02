@@ -1,31 +1,23 @@
 # ZxLean
 
-## Widget development
+Install the [Lean 4 VS Code extension](https://marketplace.visualstudio.com/items?itemName=leanprover.lean4)
 
-The InfoView widget lives in `zx_view_widget/src/`. After editing the TypeScript source:
+## ZX viewing widget
 
-```sh
-cd zx_view_widget
-npm install   # first time only
-npm run build # compiles TS, bundles JS, and invalidates Lean cache
-cd ..
-lake build    # picks up the new widget JS
-```
+The InfoView widget lives in `zx_view_widget/src/`
 
-## Python server
+It is a React component, written in Typescript, bundled with rollup
 
-The widget sends diagram data to a local Flask server for processing. To start it:
+`lake` handles `npm install` and the JS bundle automatically
+
+## PyZX dameon
+
+The widget sends diagram data to a local Flask server for processing
+
+Start it in a terminal
 
 ```sh
 cd pyzx_daemon
 uv sync
 uv run python app.py
-```
-
-The server runs on `http://127.0.0.1:5050`. You can test it with:
-
-```sh
-curl -X POST http://127.0.0.1:5050/diagram \
-  -H "Content-Type: application/json" \
-  -d '{"nodes":[],"edges":[]}'
 ```
