@@ -42,6 +42,8 @@ jobs:
         run: uv run ruff check
       - name: Run typechecking
         run: uv run ty check
+      - name: Run tests
+        run: uv run pytest
 
   zx_view_widget:
     runs-on: ubuntu-latest
