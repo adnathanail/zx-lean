@@ -24,5 +24,20 @@ def empty_graph : ZXDiagram :=
 #html (Html.ofComponent ZXWidget ⟨twoSpiders.toJson⟩ #[])
 #html (Html.ofComponent ZXWidget ⟨((twoSpiders.spiderFusion 1 2).getD empty_graph).toJson⟩ #[])
 
+def threeSpiders : ZXDiagram :=
+  { nodes := #[.input 0, .spider .Z ⟨1, 2⟩, .spider .Z ⟨1, 1⟩, .spider .Z ⟨3, 4⟩, .output 0]
+    edges := #[⟨0, 1⟩, ⟨1, 2⟩, ⟨2, 3⟩, ⟨3, 4⟩] }
+
+#html (Html.ofComponent ZXWidget ⟨threeSpiders.toJson⟩ #[])
+#html (Html.ofComponent ZXWidget ⟨((threeSpiders.spiderFusion 2 3).getD empty_graph).toJson⟩ #[])
+
+def zCnotZ : ZXDiagram :=
+  { nodes := #[
+      .input 0, .spider .Z ⟨1, 1⟩, .spider .Z ⟨0, 1⟩, .spider .Z ⟨1, 1⟩, .output 0,
+      .input 1, .spider .X ⟨0, 1⟩, .output 1
+    ]
+    edges := #[⟨0, 1⟩, ⟨1, 2⟩, ⟨2, 3⟩, ⟨3, 4⟩, ⟨5, 6⟩] }
+#html (Html.ofComponent ZXWidget ⟨zCnotZ.toJson⟩ #[])
+
 def main : IO Unit :=
   IO.println "Open Main.lean in VS Code to see the ZX diagram in the InfoView."
