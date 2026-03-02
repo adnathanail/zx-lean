@@ -10,7 +10,8 @@
     "isolatedModules": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "types": ["vitest/globals"]
   },
-  "include": ["./src/*.ts", "./src/*.tsx"]
+  "include": ["./src/**/*.ts", "./src/**/*.tsx"]
 }
