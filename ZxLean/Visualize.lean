@@ -3,15 +3,20 @@ import ProofWidgets.Component.HtmlDisplay
 
 open Lean Server ProofWidgets
 
+-- Python daemon config
+def daemonHost := "127.0.0.1"
+def daemonPort := 5050
+def daemonUrl := s!"http://{daemonHost}:{daemonPort}"
+
 /-- Kill any existing pyzx daemon and start a fresh one. -/
 initialize do
   discard <| IO.Process.output {
     cmd := "sh"
-    args := #["-c", "lsof -ti:5050 | xargs kill 2>/dev/null || true"]
+    args := #["-c", s!"lsof -ti:{daemonPort} | xargs kill 2>/dev/null || true"]
   }
   discard <| IO.Process.spawn {
     cmd := "sh"
-    args := #["-c", "cd pyzx_daemon && exec uv run python -u app.py >pyzx_daemon.log 2>&1"]
+    args := #["-c", s!"cd pyzx_daemon && exec uv run python -u app.py --host {daemonHost} --port {daemonPort} --debug >pyzx_daemon.log 2>&1"]
   }
 
 /-! # ZX Diagram Visualization
@@ -55,8 +60,12 @@ def ZXDiagram.toJson (d : ZXDiagram) : Json :=
 
 structure ZXWidgetProps where
   diagram : Json
+  serverUrl : String
   deriving RpcEncodable
 
 @[widget_module]
 def ZXWidget : Component ZXWidgetProps where
   javascript := include_str ".." / "zx_view_widget" / "build" / "zxDiagram.js"
+
+def ZXDiagram.toHtml (d : ZXDiagram) : Html :=
+  Html.ofComponent ZXWidget ⟨d.toJson, daemonUrl⟩ #[]

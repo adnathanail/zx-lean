@@ -1,8 +1,7 @@
 import * as React from 'react'
 
-const SERVER_URL = 'http://127.0.0.1:5050'
-
 interface ZXWidgetProps {
+  serverUrl: string
   diagram: {
     nodes: Array<{
       id: number
@@ -18,7 +17,7 @@ interface ZXWidgetProps {
   }
 }
 
-export default function ZXDiagram({ diagram }: ZXWidgetProps) {
+export default function ZXDiagram({ diagram, serverUrl }: ZXWidgetProps) {
   const [image, setImage] = React.useState<string | null>(null)
   const [loading, setLoading] = React.useState(false)
   const [error, setError] = React.useState<string | null>(null)
@@ -30,7 +29,7 @@ export default function ZXDiagram({ diagram }: ZXWidgetProps) {
     setLoading(true)
     setError(null)
     setImage(null)
-    fetch(`${SERVER_URL}/diagram`, {
+    fetch(`${serverUrl}/diagram`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: diagramJson,
@@ -48,7 +47,7 @@ export default function ZXDiagram({ diagram }: ZXWidgetProps) {
       })
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false))
-  }, [diagramJson])
+  }, [diagramJson, serverUrl])
 
   return (
     <div style={{ fontFamily: 'monospace', padding: '10px' }}>

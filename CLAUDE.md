@@ -21,6 +21,7 @@ The Python daemon starts automatically when `ZxLean.Visualize` is imported (via 
 
 - ZXDiagram nodes: `.input ioId`, `.output ioId`, `.spider color phase` where phase is a `Rat` (num/den)
 - JSON wire format between widget and daemon: `{"nodes": [...], "edges": [{"src": id, "tgt": id}]}`
+- Daemon host/port/URL config constants live in `ZxLean/Visualize.lean` (`daemonHost`, `daemonPort`, `daemonUrl`) — this is the single source of truth, passed to both the Python daemon (via CLI args) and the TypeScript widget (via props)
 - Daemon runs on `127.0.0.1:5050`
 - Python requires `>=3.14`, uses `uv` for dependency management (not pip)
 

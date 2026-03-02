@@ -1,7 +1,5 @@
 import ZxLean
 
-open ProofWidgets
-
 /-- in -→ Z(π) -→ Z(2π) -→ out -/
 def twoSpiders : ZXDiagram :=
   { nodes := #[.input 0, .spider .Z ⟨1, 2⟩, .spider .Z ⟨1, 1⟩, .output 0]
@@ -20,16 +18,16 @@ def empty_graph : ZXDiagram :=
 -- #eval some fused
 -- #eval twoSpiders.spiderFusion 1 2 == some fused
 
-#html (Html.ofComponent ZXWidget ⟨empty_graph.toJson⟩ #[])
-#html (Html.ofComponent ZXWidget ⟨twoSpiders.toJson⟩ #[])
-#html (Html.ofComponent ZXWidget ⟨((twoSpiders.spiderFusion 1 2).getD empty_graph).toJson⟩ #[])
+#html empty_graph.toHtml
+#html twoSpiders.toHtml
+#html ((twoSpiders.spiderFusion 1 2).getD empty_graph).toHtml
 
 def threeSpiders : ZXDiagram :=
   { nodes := #[.input 0, .spider .Z ⟨1, 2⟩, .spider .Z ⟨1, 1⟩, .spider .Z ⟨3, 4⟩, .output 0]
     edges := #[⟨0, 1⟩, ⟨1, 2⟩, ⟨2, 3⟩, ⟨3, 4⟩] }
 
-#html (Html.ofComponent ZXWidget ⟨threeSpiders.toJson⟩ #[])
-#html (Html.ofComponent ZXWidget ⟨((threeSpiders.spiderFusion 2 3).getD empty_graph).toJson⟩ #[])
+#html threeSpiders.toHtml
+#html ((threeSpiders.spiderFusion 2 3).getD empty_graph).toHtml
 
 def zCnotZ : ZXDiagram :=
   { nodes := #[
@@ -37,7 +35,7 @@ def zCnotZ : ZXDiagram :=
       .input 1, .spider .X ⟨0, 1⟩, .output 1
     ]
     edges := #[⟨0, 1⟩, ⟨1, 2⟩, ⟨2, 3⟩, ⟨3, 4⟩, ⟨5, 6⟩] }
-#html (Html.ofComponent ZXWidget ⟨zCnotZ.toJson⟩ #[])
+#html zCnotZ.toHtml
 
 def main : IO Unit :=
   IO.println "Open Main.lean in VS Code to see the ZX diagram in the InfoView."

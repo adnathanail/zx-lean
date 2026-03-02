@@ -6,8 +6,10 @@ To start it manually:
 
 ```sh
 uv sync
-uv run python app.py
+uv run python app.py --host 127.0.0.1 --port 5050 --debug
 ```
+
+`--host` and `--port` are required flags (no defaults). The canonical values are defined in `ZxLean/Visualize.lean`.
 
 The server runs on `http://127.0.0.1:5050`. You can test it with:
 
