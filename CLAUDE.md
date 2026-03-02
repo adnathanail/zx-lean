@@ -1,0 +1,30 @@
+# ZxLean
+
+Lean 4 project for ZX-calculus diagrams with interactive visualization via ProofWidgets.
+
+## Project structure
+
+- `ZxLean/` — Lean 4 library: ZX diagram types, spider fusion, JSON serialization
+- `zx_view_widget/` — TypeScript ProofWidgets widget (React, rollup). Sends diagram JSON to pyzx_daemon, displays rendered PNG in VS Code InfoView
+- `pyzx_daemon/` — Python Flask server (managed with `uv`). Converts ZxLean JSON → pyzx Graph, renders with matplotlib, returns base64 PNG
+- `Main.lean` — Entry point with example diagrams shown in InfoView
+
+## Build commands
+
+```sh
+lake build
+
+# Python daemon (run in a separate terminal)
+cd pyzx_daemon && uv sync && uv run python app.py
+```
+
+## Key conventions
+
+- ZXDiagram nodes: `.input ioId`, `.output ioId`, `.spider color phase` where phase is a `Rat` (num/den)
+- JSON wire format between widget and daemon: `{"nodes": [...], "edges": [{"src": id, "tgt": id}]}`
+- Daemon runs on `127.0.0.1:5050`
+- Python requires `>=3.14`, uses `uv` for dependency management (not pip)
+
+## Lean tips
+
+- `ZXDiagram` has no `Inhabited` instance — use `.getD` with a fallback (not `.get!`) when unwrapping `Option ZXDiagram`

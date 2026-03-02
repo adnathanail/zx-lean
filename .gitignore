@@ -6,3 +6,5 @@ zx_view_widget/dist/
 zx_view_widget/build/
 pyzx_daemon/__pycache__/
 pyzx_daemon/.venv/
+
+.claude/
