@@ -2,7 +2,7 @@ import commonjs from '@rollup/plugin-commonjs'
 import resolve from '@rollup/plugin-node-resolve'
 import replace from '@rollup/plugin-replace'
 import terser from '@rollup/plugin-terser'
-import { readdirSync } from 'fs'
+import { readdirSync } from 'node:fs'
 
 const production = process.env.NODE_ENV === 'production'
 const outputDir = process.env.OUTPUT_DIR || 'build'
