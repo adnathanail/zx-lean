@@ -476,6 +476,15 @@ wheels = [
 ]
 
 [[package]]
+name = "pixelmatch"
+version = "0.3.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/62/76/7fc321f805117ab1de302aed3f5b97a502195351efee3e5fa97a1d3c417a/pixelmatch-0.3.1.tar.gz", hash = "sha256:cbae6f7fedcc6e77c36783c2638f1e956c26c0d0179b4186bb1b81098e4e66fc", size = 6800, upload-time = "2026-03-01T06:45:15.811Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/df/b5/b7e17147c329e294f8675461630bd3db5d78d46c1256c4cbce82defc8476/pixelmatch-0.3.1-py3-none-any.whl", hash = "sha256:d53de8a09ff34ca3ffd86c1144a7015ccb096c8b6b8fb168edd2d9033da7f722", size = 9275, upload-time = "2026-03-01T06:45:14.654Z" },
+]
+
+[[package]]
 name = "pluggy"
 version = "1.6.0"
 source = { registry = "https://pypi.org/simple" }
@@ -599,6 +608,7 @@ dependencies = [
 
 [package.dev-dependencies]
 dev = [
+    { name = "pixelmatch" },
     { name = "pytest" },
     { name = "ruff" },
     { name = "ty" },
@@ -614,6 +624,7 @@ requires-dist = [
 
 [package.metadata.requires-dev]
 dev = [
+    { name = "pixelmatch", specifier = ">=0.3" },
     { name = "pytest", specifier = ">=8" },
     { name = "ruff", specifier = ">=0.15.4" },
     { name = "ty", specifier = ">=0.0.19" },

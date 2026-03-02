@@ -2,9 +2,9 @@ import base64
 import io
 from pathlib import Path
 
-import numpy as np
 import pytest
 from PIL import Image
+from pixelmatch.contrib.PIL import pixelmatch
 
 from app import app
 
@@ -23,16 +23,8 @@ DIAGRAM = {
 }
 
 
-def _decode_png(b64: str) -> np.ndarray:
-    img = Image.open(io.BytesIO(base64.b64decode(b64))).convert("RGBA")
-    return np.array(img, dtype=np.float64)
-
-
-def _images_match(actual: np.ndarray, expected: np.ndarray, threshold: float = 3.0) -> tuple[bool, float]:
-    """Compare images by RMSE. threshold is on 0-255 scale."""
-    assert actual.shape == expected.shape, f"Shape mismatch: {actual.shape} vs {expected.shape}"
-    rmse = float(np.sqrt(np.mean((actual - expected) ** 2)))
-    return rmse < threshold, rmse
+def _decode_png(b64: str) -> Image.Image:
+    return Image.open(io.BytesIO(base64.b64decode(b64))).convert("RGBA")
 
 
 def test_diagram_snapshot():
@@ -47,9 +39,16 @@ def test_diagram_snapshot():
     if not snapshot_path.exists():
         # First run: save reference and skip
         snapshot_path.parent.mkdir(parents=True, exist_ok=True)
-        Image.fromarray(actual.astype(np.uint8)).save(snapshot_path)
+        actual.save(snapshot_path)
         pytest.skip(f"Saved new snapshot to {snapshot_path}. Re-run to compare.")
 
-    expected = np.array(Image.open(snapshot_path).convert("RGBA"), dtype=np.float64)
-    match, rmse = _images_match(actual, expected)
-    assert match, f"Image RMSE {rmse:.2f} exceeds threshold. Delete snapshot and re-run to update."
+    expected = Image.open(snapshot_path).convert("RGBA")
+    assert actual.size == expected.size, f"Size mismatch: {actual.size} vs {expected.size}"
+
+    diff_img = Image.new("RGBA", actual.size)
+    mismatch = pixelmatch(actual, expected, output=diff_img, threshold=0.1, alpha=0.5)
+
+    if mismatch > 0:
+        diff_path = SNAPSHOTS / "test_z_spider_diff.png"
+        diff_img.save(diff_path)
+        pytest.fail(f"{mismatch} pixels differ. Diff saved to {diff_path}. Delete snapshot and re-run to update.")

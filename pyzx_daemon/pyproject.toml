@@ -13,6 +13,7 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "pixelmatch>=0.3",
     "pytest>=8",
     "ruff>=0.15.4",
     "ty>=0.0.19",
@@ -40,3 +41,8 @@ ignore = [
 
 [tool.ruff.lint.isort]
 known-first-party = ["lib"]
+
+[tool.pytest.ini_options]
+filterwarnings = [
+    "ignore:FigureCanvasAgg is non-interactive:UserWarning",
+]
