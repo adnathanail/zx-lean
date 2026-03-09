@@ -33,6 +33,11 @@ def Node.toJson (n : Node) (idx : Nat) : Json :=
     let color := match c with | .Z => "Z" | .X => "X"
     .mkObj [("id", natJson idx), ("type", .str "spider"),
             ("color", .str color), ("phase", p.toJson)]
+  | .hadamard =>
+    -- Default phase for Hadamard box is pi
+    let phase: Phase := ⟨1, 1⟩
+    .mkObj [("id", natJson idx), ("type", .str "hadamard"),
+            ("phase", phase.toJson)]
   | .input id =>
     .mkObj [("id", natJson idx), ("type", .str "input"), ("ioId", natJson id)]
   | .output id =>

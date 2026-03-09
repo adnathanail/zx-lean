@@ -21,6 +21,7 @@ instance : Add Phase where
 /-- Internal spider (Z/X) or input or output -/
 inductive Node where
   | spider (color : SpiderColor) (phase : Phase)
+  | hadamard
   | input  (id : Nat)
   | output (id : Nat)
   deriving Repr, BEq

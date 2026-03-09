@@ -42,6 +42,11 @@ def zxlean_to_pyzx(data) -> ZXLeanGraph:
             phase = _parse_phase(phase_str)
             g.set_type(nid, ty)
             g.set_phase(nid, phase)
+        elif ntype == "hadamard":
+            phase_str = node.get("phase", "0")
+            phase = _parse_phase(phase_str)
+            g.set_type(nid, VertexType.H_BOX)
+            g.set_phase(nid, phase)
         else:
             g.set_type(nid, VertexType.BOUNDARY)
 
