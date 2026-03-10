@@ -33,10 +33,19 @@ def cnot : ZXDiagram :=
   { nodes := [some (.input 0), some (.spider .Z ⟨2, 1⟩), none, none, some (.output 0), some (.input 1), some (.spider .X ⟨0, 1⟩), some (.output 1)]
     edges := [⟨0, 1⟩, ⟨1, 4⟩, ⟨1, 6⟩, ⟨5, 6⟩, ⟨6, 7⟩] }
 
+-- Test merging two π spiders gives identity (π + π = 2π ≡ 0 mod 2π)
+def twoPiSpiders : ZXDiagram :=
+  .ofList [.input 0, .spider .Z ⟨1, 1⟩, .spider .Z ⟨1, 1⟩, .output 0]
+          [⟨0, 1⟩, ⟨1, 2⟩, ⟨2, 3⟩]
+def twoPiSpidersMerged : ZXDiagram :=
+  { nodes := [some (.input 0), some (.spider .Z ⟨0, 1⟩), none, some (.output 0)]
+    edges := [⟨0, 1⟩, ⟨1, 3⟩] }
+
 def spiderFusionTests : TestSeq :=
   test "merging two spiders" ((twoSpiders.spiderFusion 1 2).get! == twoSpidersMerged) $
   test "merging three spiders once" ((threeSpiders.spiderFusion 1 2).get! == threeSpidersMerged1) $
   test "merging three spiders twice" (((threeSpiders.spiderFusion 1 2).get!.spiderFusion 1 3).get! == threeSpidersMerged2) $
-  test "simplifying Z CNOT Z to just CNOT" ((((zCnotZ.spiderFusion 1 2).get!).spiderFusion 1 3).get! == cnot)
+  test "simplifying Z CNOT Z to just CNOT" ((((zCnotZ.spiderFusion 1 2).get!).spiderFusion 1 3).get! == cnot) $
+  test "two π spiders fuse to identity (phase 0)" ((twoPiSpiders.spiderFusion 1 2).get! == twoPiSpidersMerged)
 
 #lspec spiderFusionTests
