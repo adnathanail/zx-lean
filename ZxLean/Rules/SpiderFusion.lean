@@ -3,17 +3,17 @@ import ZxLean.Tactics
 
 open Lean Elab Tactic Meta
 
-def ZXDiagram.spiderFusion (d : ZXDiagram) (a b : NodeId) : Option ZXDiagram := do
+def ZXDiagram.spiderFusion (d : ZXDiagram) (a b : NodeId) : Except String ZXDiagram := do
   -- Get node info
-  let nodeA ← d.getNode? a
-  let nodeB ← d.getNode? b
-  let colorA ← Node.color? nodeA
-  let colorB ← Node.color? nodeB
-  let phaseA ← Node.phase? nodeA
-  let phaseB ← Node.phase? nodeB
+  let nodeA ← (d.getNode? a).toExcept s!"Node {a} not found"
+  let nodeB ← (d.getNode? b).toExcept s!"Node {b} not found"
+  let colorA ← (Node.color? nodeA).toExcept s!"Node {a} is not a spider"
+  let colorB ← (Node.color? nodeB).toExcept s!"Node {b} is not a spider"
+  let phaseA ← (Node.phase? nodeA).toExcept s!"Node {a} has no phase"
+  let phaseB ← (Node.phase? nodeB).toExcept s!"Node {b} has no phase"
   -- Check we have two connected spiders of the same colours
-  guard (colorA == colorB)
-  guard (d.connected a b)
+  unless colorA == colorB do throw s!"Colors don't match: nodes {a} and {b}"
+  unless d.connected a b do throw s!"Nodes {a} and {b} are not connected"
   -- New merged spider
   let merged := Node.spider colorA (phaseA + phaseB)
   -- Rewire edges from b's neighbors (except a) to now point to a
@@ -29,7 +29,7 @@ def ZXDiagram.spiderFusion (d : ZXDiagram) (a b : NodeId) : Option ZXDiagram := 
 namespace ZxLean
 
 axiom ZXDiagram.spiderFusion_sound (d : ZXDiagram) (a b : NodeId) (d' : ZXDiagram) :
-  d.spiderFusion a b = some d' → d ≈z d'
+  d.spiderFusion a b = .ok d' → d ≈z d'
 
 /-- Find the first neighbor of node `a` that can be fused with it (same-color spider). -/
 private def findFusionPartner (d : ZXDiagram) (a : NodeId) : Option NodeId := do

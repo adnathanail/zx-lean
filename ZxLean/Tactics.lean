@@ -14,6 +14,12 @@ private unsafe def evalZXDiagramImpl (e : Expr) : MetaM ZXDiagram :=
 @[implemented_by evalZXDiagramImpl]
 opaque evalZXDiagram : Expr → MetaM ZXDiagram
 
+private unsafe def evalStringImpl (e : Expr) : MetaM String :=
+  Meta.evalExpr String (mkConst ``String) e
+
+@[implemented_by evalStringImpl]
+opaque evalString : Expr → MetaM String
+
 -- == Goal parsing ==
 
 /-- Extract LHS and RHS from a goal of the form `d ≈z d'` -/
@@ -46,9 +52,16 @@ def applyRewrite (stx : Syntax) (label : String)
   let rewriteApp ← mkAppM rewriteFn (#[lhs] ++ args)
   let rewriteReduced ← whnf rewriteApp
 
-  -- Check it returned `some d₁`
-  let some (_, d₁) := rewriteReduced.app2? ``Option.some
-    | throwError "{label} failed"
+  -- Check it returned `.ok d₁`
+  let some (_, _, d₁) := rewriteReduced.app3? ``Except.ok
+    | do
+      -- Try to extract the error message from `.error msg`
+      let some (_, _, msgExpr) := rewriteReduced.app3? ``Except.error | throwError "{label} failed"
+      let msg ← try
+                   let msgReduced ← whnf msgExpr
+                   liftM (evalString msgReduced : MetaM String)
+                 catch _ => pure s!"{label} failed"
+      throwError "{msg}"
 
   -- New goal: d₁ ≈z rhs
   let newGoalType ← mkAppM ``ZXDiagram.equiv #[d₁, rhs]

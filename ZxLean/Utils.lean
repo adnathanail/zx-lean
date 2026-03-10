@@ -1,3 +1,8 @@
+/-- Convert an Option to Except, using the given error message for `none` -/
+def Option.toExcept (msg : String) : Option α → Except String α
+  | some a => .ok a
+  | none => .error msg
+
 /-- Insert an element into a sorted list (structural recursion, kernel-reducible) -/
 def List.orderedInsert [Ord α] (a : α) : List α → List α
   | [] => [a]
