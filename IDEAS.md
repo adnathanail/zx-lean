@@ -1,7 +1,7 @@
 - Better equality checking
     - Simplify to canonical form?
     - Conversion to matrices?
-    - Different node indexes?
+    - Do normalization in equality checks, not in rewrites
 - Use PyZX D3 drawing of diagrams - as our output is a React component
 - Simplification routines as tactics
 - To/from circuit form

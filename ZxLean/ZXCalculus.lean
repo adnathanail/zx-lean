@@ -1,5 +1,16 @@
 import ZxLean.ZXDiagram
 
+/-- Canonicalize an edge so that src ≤ tgt (edges are undirected) -/
+def Edge.normalize (e : Edge) : Edge :=
+  if e.src ≤ e.tgt then e else { src := e.tgt, tgt := e.src }
+
+/-- Normalize a diagram: canonicalize edge direction, sort edges, and simplify phases -/
+def ZXDiagram.normalize (d : ZXDiagram) : ZXDiagram :=
+  { nodes := d.nodes.map fun
+      | some (.spider c p) => some (.spider c p.simplify)
+      | n => n
+    edges := (d.edges.map Edge.normalize).insertionSort }
+
 def ZXDiagram.spiderFusion (d : ZXDiagram) (a b : NodeId) : Option ZXDiagram := do
   -- Get node info
   let nodeA ← d.getNode? a
@@ -21,7 +32,7 @@ def ZXDiagram.spiderFusion (d : ZXDiagram) (a b : NodeId) : Option ZXDiagram := 
   let d := d.setNode a merged
   let d := { d with edges := d.edges ++ newEdges }
   let d := d.removeNode b
-  return d
+  return d.normalize
 
 def ZXDiagram.identityRemoval (d: ZXDiagram) (a : NodeId) : Option ZXDiagram := do
   -- Check the node being removed has no phase
@@ -34,5 +45,5 @@ def ZXDiagram.identityRemoval (d: ZXDiagram) (a : NodeId) : Option ZXDiagram := 
   -- Remove the node
   let d := d.removeEdgesOf a
   let d := d.removeNode a
-  let d := { d with edges := d.edges ++ #[⟨neighbors[0]!, neighbors[1]!⟩] }
-  return d
+  let d := { d with edges := d.edges ++ #[Edge.mk neighbors[0]! neighbors[1]!] }
+  return d.normalize
