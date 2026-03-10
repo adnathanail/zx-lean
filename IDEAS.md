@@ -5,3 +5,4 @@
 - Use PyZX D3 drawing of diagrams - as our output is a React component
 - Simplification routines as tactics
 - To/from circuit form
+- Create typeclass(?) for rewrite rules to implement, so tactics can be automatically derived or something

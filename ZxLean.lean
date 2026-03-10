@@ -4,3 +4,4 @@ import ZxLean.ZXDiagram
 import ZxLean.ZXCalculus
 import ZxLean.Axioms
 import ZxLean.Visualize
+import ZxLean.Tactics
