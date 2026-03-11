@@ -8,3 +8,4 @@ import ZxLean.Tactics
 import ZxLean.Rules.SpiderFusion
 import ZxLean.Rules.IdentityRemoval
 import ZxLean.Rules.HadamardHadamard
+import ZxLean.DerivedRules.PiPi

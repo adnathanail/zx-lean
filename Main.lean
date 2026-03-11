@@ -32,8 +32,7 @@ def ppmSimplified : ZXDiagram :=
 
 theorem doPpmSimp : piPiMinus ≈z ppmSimplified := by
   zx_show
-  zx_spider_fusion 1
-  zx_id_removal 1
+  zx_pipi 1
   zx_rfl
 
 #print axioms doPpmSimp
