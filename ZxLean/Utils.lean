@@ -1,3 +1,13 @@
+/-- Extract the value from an Except, panicking on error -/
+def Except.get! [Inhabited α] : Except ε α → α
+  | .ok a => a
+  | .error _ => panic! "Except.get! called on .error"
+
+/-- Check if an Except is an error -/
+def Except.isError : Except ε α → Bool
+  | .ok _ => false
+  | .error _ => true
+
 /-- Convert an Option to Except, using the given error message for `none` -/
 def Option.toExcept (msg : String) : Option α → Except String α
   | some a => .ok a
